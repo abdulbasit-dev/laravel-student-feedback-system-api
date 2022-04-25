@@ -22,7 +22,7 @@ class CollegeController extends Controller
         //$this->authorize("_access");
 
         $colleges = College::query()->with('departments:id,college_id,name')->select('id', 'name')->get();
-        return $this->josnResponse(true, "All Collegs.", Response::HTTP_OK, $colleges);
+        return $this->josnResponse(true, "All collegs.", Response::HTTP_OK, $colleges);
     }
 
     /**
@@ -36,8 +36,25 @@ class CollegeController extends Controller
         //check permission
         //$this->authorize("_access");
 
-        $colleges = College::query()->pluck('name','id')->toArray();
-        return $this->josnResponse(true, "All Collegs.", Response::HTTP_OK, $colleges);
+        $colleges = College::query()->pluck('name', 'id')->toArray();
+        return $this->josnResponse(true, "List of collegs.", Response::HTTP_OK, $colleges);
+    }
+
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \College  $college
+     * @return \Illuminate\Http\Response
+     */
+    public function show(College $college)
+    {
+        //check permission
+        //$this->authorize("_access");
+
+        $college->load('departments:id,college_id,name');
+        
+        return $this->josnResponse(true, "Show departments of $college->name college", Response::HTTP_OK, $college);
     }
 
     /**
