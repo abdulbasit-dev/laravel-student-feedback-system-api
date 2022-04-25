@@ -18,7 +18,7 @@ class {{ class }} extends Controller
     {
         //check permission
         //$this->authorize("_access");
-        //return $this->josnResponse(true, " successfully.", Response::HTTP_);
+        //return $this->josnResponse(true, "All {{ model }}.", Response::HTTP_OK);
     }
 
     /**
@@ -31,7 +31,17 @@ class {{ class }} extends Controller
     {
         //check permission
         //$this->authorize("_access");
-        //return $this->josnResponse(true, " successfully.", Response::HTTP_);
+
+        //validation
+        $validator = Validator::make($request->all(),[
+            ""=>[]
+        ]);
+
+        if ($validator->fails()) {
+            return $this->josnResponse(false, "The given data was invalid.", Response::HTTP_UNPROCESSABLE_ENTITY, null, $validator->errors()->all());
+        }
+
+        //return $this->josnResponse(true, "{{ model }} cretaed successfully.", Response::HTTP_CREATED);
     }
 
     /**
@@ -44,7 +54,7 @@ class {{ class }} extends Controller
     {
         //check permission
         //$this->authorize("_access");
-        //return $this->josnResponse(true, " successfully.", Response::HTTP_);
+        //return $this->josnResponse(true, "Show {{ model }} info.", Response::HTTP_OK);
     }
 
     /**
@@ -58,7 +68,17 @@ class {{ class }} extends Controller
     {
         //check permission
         //$this->authorize("_access");
-        //return $this->josnResponse(true, " successfully.", Response::HTTP_);
+
+        //validation
+        $validator = Validator::make($request->all(),[
+            ""=>[]
+        ]);
+
+        if ($validator->fails()) {
+            return $this->josnResponse(false, "The given data was invalid.", Response::HTTP_UNPROCESSABLE_ENTITY, null, $validator->errors()->all());
+        }
+
+        //return $this->josnResponse(true, "{{ model }} updated successfully.", Response::HTTP_OK);
     }
 
     /**
@@ -71,6 +91,6 @@ class {{ class }} extends Controller
     {
         //check permission
         //$this->authorize("_access");
-        //return $this->josnResponse(true, " successfully.", Response::HTTP_);
+        //return $this->josnResponse(true, "{{ model }} deleted successfully.", Response::HTTP_OK);
     }
 }

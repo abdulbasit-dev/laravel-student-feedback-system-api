@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Models\College;
+use Arr;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Validator;
 
 class CollegeController extends Controller
 {
@@ -18,7 +20,24 @@ class CollegeController extends Controller
     {
         //check permission
         //$this->authorize("_access");
-        //return $this->josnResponse(true, " successfully.", Response::HTTP_);
+
+        $colleges = College::query()->with('departments:id,college_id,name')->select('id', 'name')->get();
+        return $this->josnResponse(true, "All Collegs.", Response::HTTP_OK, $colleges);
+    }
+
+    /**
+     * Display a listing of array of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+
+    public function list()
+    {
+        //check permission
+        //$this->authorize("_access");
+
+        $colleges = College::query()->pluck('name','id')->toArray();
+        return $this->josnResponse(true, "All Collegs.", Response::HTTP_OK, $colleges);
     }
 
     /**
@@ -31,20 +50,20 @@ class CollegeController extends Controller
     {
         //check permission
         //$this->authorize("_access");
-        //return $this->josnResponse(true, " successfully.", Response::HTTP_);
-    }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\College  $college
-     * @return \Illuminate\Http\Response
-     */
-    public function show(College $college)
-    {
-        //check permission
-        //$this->authorize("_access");
-        //return $this->josnResponse(true, " successfully.", Response::HTTP_);
+        $validator = Validator::make($request->all(), [
+            "name" => ['required', 'unique:colleges,name']
+        ]);
+
+        if ($validator->fails()) {
+            return $this->josnResponse(false, "The given data was invalid.", Response::HTTP_UNPROCESSABLE_ENTITY, null, $validator->errors()->all());
+        }
+
+        College::create([
+            "name" => $request->name
+        ]);
+
+        return $this->josnResponse(true, "College created successfully.", Response::HTTP_CREATED);
     }
 
     /**
@@ -58,7 +77,20 @@ class CollegeController extends Controller
     {
         //check permission
         //$this->authorize("_access");
-        //return $this->josnResponse(true, " successfully.", Response::HTTP_);
+
+        $validator = Validator::make($request->all(), [
+            "name" => ['required', 'unique:colleges,name,' . $college->id]
+        ]);
+
+        if ($validator->fails()) {
+            return $this->josnResponse(false, "The given data was invalid.", Response::HTTP_UNPROCESSABLE_ENTITY, null, $validator->errors()->all());
+        }
+
+        $college->update([
+            "name" => $request->name
+        ]);
+
+        return $this->josnResponse(true, "College updated successfully.", Response::HTTP_OK);
     }
 
     /**
@@ -71,6 +103,8 @@ class CollegeController extends Controller
     {
         //check permission
         //$this->authorize("_access");
-        //return $this->josnResponse(true, " successfully.", Response::HTTP_);
+
+        $college->delete();
+        return $this->josnResponse(true, "College deleted successfully.", Response::HTTP_OK);
     }
 }

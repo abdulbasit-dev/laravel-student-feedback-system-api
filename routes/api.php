@@ -60,8 +60,9 @@ Route::group(['prefix' => 'v1'], function () {
         return "ok";
     });
 
+    Route::get('colleges/list', [CollegeController::class, 'list']);
     Route::apiResource('colleges', CollegeController::class);
-    Route::apiResource('colleges', DepartmentController::class);
+    Route::apiResource('departments', DepartmentController::class);
 
 
     /*##################
