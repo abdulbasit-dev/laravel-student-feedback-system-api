@@ -10,7 +10,8 @@ use App\Http\Controllers\Api\V1\Auth\{
 };
 
 use App\Http\Controllers\Api\V1\{
-    CategoryController,
+    CollegeController,
+    DepartmentController,
     UserProfileController
 };
 
@@ -58,6 +59,9 @@ Route::group(['prefix' => 'v1'], function () {
 
         return "ok";
     });
+
+    Route::apiResource('colleges', CollegeController::class);
+    Route::apiResource('colleges', DepartmentController::class);
 
 
     /*##################

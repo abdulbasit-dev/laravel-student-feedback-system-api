@@ -1,13 +1,13 @@
 <?php
 
-namespace {{ namespace }};
+namespace App\Http\Controllers\Api\V1;
 
-use {{ namespacedModel }};
-use {{ rootNamespace }}Http\Controllers\Controller;
+use App\Http\Controllers\Controller;
+use App\Models\College;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class {{ class }} extends Controller
+class CollegeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -37,10 +37,10 @@ class {{ class }} extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \{{ namespacedModel }}  ${{ modelVariable }}
+     * @param  \App\Models\College  $college
      * @return \Illuminate\Http\Response
      */
-    public function show({{ model }} ${{ modelVariable }})
+    public function show(College $college)
     {
         //check permission
         //$this->authorize("_access");
@@ -51,10 +51,10 @@ class {{ class }} extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \{{ namespacedModel }}  ${{ modelVariable }}
+     * @param  \App\Models\College  $college
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, {{ model }} ${{ modelVariable }})
+    public function update(Request $request, College $college)
     {
         //check permission
         //$this->authorize("_access");
@@ -64,10 +64,10 @@ class {{ class }} extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \{{ namespacedModel }}  ${{ modelVariable }}
+     * @param  \App\Models\College  $college
      * @return \Illuminate\Http\Response
      */
-    public function destroy({{ model }} ${{ modelVariable }})
+    public function destroy(College $college)
     {
         //check permission
         //$this->authorize("_access");

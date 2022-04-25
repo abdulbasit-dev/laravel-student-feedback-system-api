@@ -16,12 +16,13 @@ class CreateUsersTable extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('user_name');
+            $table->date('entry_year');
+            $table->string('stage');
             $table->string('email')->unique();
             $table->foreignId('college_id')->nullable()->constrained('colleges', 'id');
             $table->foreignId('dept_id')->nullable()->constrained('departments', 'id');
             $table->boolean('is_student')->default(1);
-            $table->boolean('is_submited')->comment("is student submit his project")->default(false);
-            $table->boolean('is_submited_idea')->comment("is student submit his idea")->default(false);
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();

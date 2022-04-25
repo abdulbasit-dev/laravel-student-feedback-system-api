@@ -10,4 +10,27 @@ use Illuminate\Routing\Controller as BaseController;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
+    //set defeult pagination limation
+    protected const ITEM_PER_PAGE = 20;
+
+    //return custome response
+    protected function josnResponse($result = true, $message = "", $code = 200, $data = null, $error = null)
+    {
+        $reponse = [
+            'result' => $result,
+            'status' => $code,
+            'message' => $message,
+        ];
+
+        if ($data) {
+            $reponse['data'] = $data;
+        }
+
+        if ($error) {
+            $reponse['errors'] = $error;
+        }
+
+        return response()->json($reponse, $code);
+    }
 }
