@@ -12,8 +12,10 @@ use App\Http\Controllers\Api\V1\Auth\{
 use App\Http\Controllers\Api\V1\{
     CollegeController,
     DepartmentController,
+    StudentController,
     UserProfileController
 };
+
 
 /*
 |--------------------------------------------------------------------------
@@ -63,10 +65,13 @@ Route::group(['prefix' => 'v1'], function () {
     //colleges
     Route::get('colleges/list', [CollegeController::class, 'list']);
     Route::apiResource('colleges', CollegeController::class);
-    
+
     //departments
     Route::get('departments/list', [DepartmentController::class, 'list']);
     Route::apiResource('departments', DepartmentController::class);
+
+    //students
+    Route::apiResource('students', StudentController::class)->parameters(['students' => 'user']);
 
 
     /*##################
