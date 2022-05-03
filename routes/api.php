@@ -31,24 +31,15 @@ use App\Http\Controllers\Api\V1\{
 
 //API V1 
 Route::group(['prefix' => 'v1'], function () {
+    /*##################
+       PUBLIC ROUTES
+    ##################*/
 
     Route::get('test', function () {
         return 'test';
     });
 
-
-    /*##################
-       PUBLIC ROUTES
-    ##################*/
-    Route::post('/register-step1', [AuthController::class, 'registerStep1']);
     Route::post('/login', [AuthController::class, 'login']);
-    Route::get('verify-email/{id}/{hash}', [EmailVerificationController::class, 'verify'])->name('verification.verify');
-    Route::resource('categories', CategoryController::class)->except('create', 'edit');
-
-    //Forget Password
-    Route::Post('forget-password', [ForgetPasswordController::class, 'forgetPassword']);
-    Route::Post('validate-code', [ForgetPasswordController::class, 'validateCode']);
-    Route::Post('new-password', [ForgetPasswordController::class, 'newPassword']);
 
     //Clear all cache
     Route::get('/clearallcache', function () {
@@ -79,18 +70,9 @@ Route::group(['prefix' => 'v1'], function () {
     ##################*/
     Route::group(['middleware' => ['auth:sanctum']], function () {
         //Auth
-        Route::post('/register-step2', [AuthController::class, 'registerStep2'])->middleware('verified');
         Route::post('/logout', [AuthController::class, 'logout']);
-
-        //Email Verify
-        Route::post('email/verification-notification', [EmailVerificationController::class, 'sendVerificationEmail']);
-        Route::post('email/check-verification', [EmailVerificationController::class, 'checkVerification']);
         //reset password
         Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('errorbag');;
-
-        //forget password
-        Route::Post('validate-code', [ForgetPasswordController::class, 'validateCode']);
-        Route::Post('new-password', [ForgetPasswordController::class, 'forgetPassword']);
 
         //User Profile
         Route::get('/user-profiles', [UserProfileController::class, 'index']);

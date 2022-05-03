@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\Auth;
+namespace App\Http\Controllers\Api\V1\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
@@ -15,108 +15,6 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class AuthController extends Controller
 {
-    public function registerStep1(Request $request)
-    {
-        //validation
-        $validator = Validator::make($request->all(), [
-            'email' => ['required', 'email', 'regex:/gmail|outlook|yahoo/', 'unique:users,email'],
-            'password' => ['required', 'string', 'min:8'],
-        ]);
-
-        if ($validator->fails()) {
-            return response()->error(422, $validator->errors()->all());
-        }
-
-        try {
-            DB::beginTransaction();
-            $user = User::create([
-                'email' => $request->email,
-                'password' => bcrypt($request->password),
-            ]);
-
-            $token = $user->createToken('myapitoken')->plainTextToken;
-
-            $user->sendEmailVerificationNotification();
-
-            DB::commit();
-            return response()->json([
-                "status" => 201,
-                "message" => __('api.verification_link_sent'),
-                'user_token' => $token
-            ], 201);
-        } catch (Exception $e) {
-            DB::rollBack();
-            return response()->error(500, __('api.internal_server_error'), $e->getMessage());
-        }
-    }
-
-    public function registerStep2(Request $request)
-    {
-        //validation
-        $validator = Validator::make($request->all(), [
-            'name' => ['required','min:3', 'max:50'],
-            'birthday' => ['required','date'],
-            'image' => ['required','image', 'max:4000'],
-            'gender' => ['required'],
-        ]);
-
-        if ($validator->fails()) {
-            return response()->error(422, $validator->errors()->all());
-        }
-
-        //get user
-        $user = auth()->user();
-
-        try {
-            DB::beginTransaction();
-
-            //Store image
-            $file_name = '';
-            if ($request->hasFile('image')) {
-                $getFileNameWithExt = $request->file('image')->getClientOriginalName();
-//                $fileName = pathinfo($getFileNameWithExt, PATHINFO_FILENAME);
-                $fileName = $request->name;
-                $file_name = $fileName . '_' . time() . '.' . $request->image->extension();
-                $request->image->move(public_path('uploads/profile'), $file_name);
-            } else {
-                $file_name = 'no_image.png';
-            }
-
-            //generate qrcode
-            $name_slug = Str::slug($request->name);
-            //PROD
-//            $qr = QrCode::format('png');
-            $qr = QrCode::format('svg');
-            $qr->margin(1);
-            $qr->size(300);
-            $qr->errorCorrection('H');
-
-            //only merge image with qrcode if user send its image
-            if ($file_name !== 'no_image.png') {
-                $qr->merge('../public/uploads/profile/' . $file_name, .3);
-            }
-            //PROD
-//            $qr->generate('http://www.simplesoftware.io', '../public/uploads/qrcodes/user/' . $name_slug . '.png');
-            $qr->generate('http://www.simplesoftware.io', '../public/uploads/qrcodes/user/' . $name_slug . '.svg');
-
-            $user->update([
-                    'name' => $request->name,
-                    'gender' => $request->gender,
-                    'birthday' => $request->birthday,
-                    'image' => '/uploads/profile/' . $file_name,
-                    'qrcode' => '/uploads/qrcodes/user/' . $name_slug . '.svg',
-                ]);
-
-
-            DB::commit();
-            return response()->success(201,'User created successfully',$user);
-
-        } catch (Exception $e) {
-            DB::rollBack();
-            return response()->error(500,__('api.internal_server_error'),$e->getMessage());
-        }
-    }
-
     public function login(Request $request): Json
     {
         //validation
