@@ -41,26 +41,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'gender' => "int"
     ];
 
-    function isFriend($user_id){
-        return $this->friends->contains($user_id);
-    }
-
-    public function friends()
+    public function department()
     {
-        return $this->belongsToMany(User::class, 'user_friends', 'user_id', 'friend_id');
-    }
-
-    public function friendsReq()
-    {
-        return $this->belongsToMany(User::class, 'friend_req', 'user_id', 'friend_req_id');
-    }
-
-    function picnics(){
-        return $this->belongsToMany(Picnic::class);
-    }
-
-    public function favItems()
-    {
-        return $this->hasMany(UserFavItem::class);
+        return $this->belongsTo(Department::class, 'dept_id', 'id');
     }
 }

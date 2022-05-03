@@ -98,15 +98,35 @@ class StudentController extends Controller
         //$this->authorize("_access");
 
         //validation
-        $validator = Validator::make($request->all(), [
-            "email" => ['unique:users,email,'.$user->id]
-        ]);
+        $validator = Validator::make(
+            $request->all(),
+            [
+                "name" => ['required', 'string', 'min:3', 'max:60'],
+                "email" => ['required', 'email', 'unique:users,email,'.$user->id, 'regex:/[\w]+@+((?i)(student.){0,1}su.edu.krd(?-i))$/im'],
+                "password" => ['required'],
+                "entry_year" => ['required'],
+                "stage" => ['required', 'integer', Rule::in([1, 2, 3, 4, 5, 6])],
+                'dept_id' => ['required', 'exists:departments,id']
+            ],
+            [
+                'email.regex' => 'Please provide a valid university email',
+                'dept_id.required' => 'The department field is required.'
+            ]
+        );
 
         if ($validator->fails()) {
             return $this->josnResponse(false, "The given data was invalid.", Response::HTTP_UNPROCESSABLE_ENTITY, null, $validator->errors()->all());
         }
 
-        $user->update($request->all());
+        $user->update([
+            "name" => $request->name,
+            "email" => $request->email,
+            "password" => bcrypt($request->password),
+            "entry_year" => $request->entry_year,
+            "stage" => $request->stage,
+            "dept_id" => $request->dept_id,
+            "is_student" => 1
+        ]);
 
         return $this->josnResponse(true, "Student updated successfully.", Response::HTTP_OK);
     }
