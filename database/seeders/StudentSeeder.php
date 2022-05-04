@@ -33,7 +33,7 @@ class StudentSeeder extends Seeder
                 "stage" => rand(1, 6),
                 "dept_id" => Department::inRandomOrder()->first()->id,
                 "is_student" => 1,
-            ]);
+            ])->assignRole('student');
         }
     }
 }

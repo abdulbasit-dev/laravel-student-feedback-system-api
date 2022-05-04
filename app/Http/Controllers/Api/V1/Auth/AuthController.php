@@ -7,6 +7,7 @@ use App\Models\User;
 use Exception;
 use Illuminate\Http\JsonResponse as Json;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -41,13 +42,13 @@ class AuthController extends Controller
         $token = $user->createToken('myapitoken')->plainTextToken;
         $user["user_token"] = $token;
 
-        return response()->success(200,__('api.login_sccess'),$user);
+        return $this->josnResponse(true, "Login successfully.", Response::HTTP_OK, $user);
     }
 
     public function logout(): Json
     {
         auth()->user()->tokens()->delete();
-        return response()->success(200,__('api.login_success'));
+        return $this->josnResponse(true, "Logout successfully.", Response::HTTP_OK);
     }
 
     public static function resetPassword(Request $request): Json
