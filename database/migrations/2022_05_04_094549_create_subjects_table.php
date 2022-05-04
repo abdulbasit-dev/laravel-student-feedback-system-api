@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUsersTable extends Migration
+class CreateSubjectsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,19 +13,13 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('subjects', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('user_name')->nullable();
-            $table->year('entry_year')->nullable();
-            $table->integer('stage')->nullable();
-            $table->string('email')->unique();
             $table->foreignId('college_id')->nullable()->constrained('colleges', 'id');
             $table->foreignId('dept_id')->nullable()->constrained('departments', 'id');
-            $table->boolean('is_student')->default(0);
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->rememberToken();
+            $table->string('name');
+            $table->string('code')->nullable();
+            $table->integer('stage')->nullable();
             $table->timestamps();
         });
     }
@@ -37,6 +31,14 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('subjects');
     }
 }
+
+// CREATE VIEW `subjects` AS
+// SELECT `college_id` , `department_id` AS `dept_id`, `course_name` AS `name`, `course_code` AS `code` , `stage`
+// FROM `course_catalog`
+
+// CREATE TABLE `tbl_subject` AS    
+//   SELECT *
+//   FROM `subjects`;
