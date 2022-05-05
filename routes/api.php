@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\V1\{
     DepartmentController,
     LecturerController,
     StudentController,
+    SubjectController,
     UserProfileController
 };
 
@@ -81,5 +82,8 @@ Route::group(['prefix' => 'v1'], function () {
         //lecturers
         Route::get('titles', [LecturerController::class, 'academicTitle']);
         Route::apiResource('lecturers', LecturerController::class);
+
+        //subjects
+        Route::apiResource('subjects', SubjectController::class);
     });
 });

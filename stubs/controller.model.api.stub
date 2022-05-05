@@ -19,7 +19,7 @@ class {{ class }} extends Controller
     {
         //check permission
         //$this->authorize("_access");
-        //return $this->josnResponse(true, "All {{ model }}.", Response::HTTP_OK);
+        //return $this->josnResponse(true, "All {{ model }}s.", Response::HTTP_OK);
     }
 
     /**

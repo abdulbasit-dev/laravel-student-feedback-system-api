@@ -19,7 +19,7 @@ class SubjectController extends Controller
     {
         //check permission
         //$this->authorize("_access");
-        //return $this->josnResponse(true, "All Subject.", Response::HTTP_OK);
+        return $this->josnResponse(true, "All Subjects.", Response::HTTP_OK);
     }
 
     /**
@@ -35,12 +35,16 @@ class SubjectController extends Controller
 
         //validation
         $validator = Validator::make($request->all(),[
-            ""=>[]
+            ""=>['required'],
         ]);
 
         if ($validator->fails()) {
             return $this->josnResponse(false, "The given data was invalid.", Response::HTTP_UNPROCESSABLE_ENTITY, null, $validator->errors()->all());
         }
+
+        //Subject::create([
+        //    ""=>$request->
+        //]);
 
         //return $this->josnResponse(true, "Subject cretaed successfully.", Response::HTTP_CREATED);
     }
@@ -79,6 +83,10 @@ class SubjectController extends Controller
             return $this->josnResponse(false, "The given data was invalid.", Response::HTTP_UNPROCESSABLE_ENTITY, null, $validator->errors()->all());
         }
 
+        //$subject->update([
+        //    ""=>$request->''
+        //]);
+
         //return $this->josnResponse(true, "Subject updated successfully.", Response::HTTP_OK);
     }
 
@@ -92,6 +100,8 @@ class SubjectController extends Controller
     {
         //check permission
         //$this->authorize("_access");
+
+        $subject->delete();
         //return $this->josnResponse(true, "Subject deleted successfully.", Response::HTTP_OK);
     }
 }
