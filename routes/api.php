@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\V1\Auth\{
 use App\Http\Controllers\Api\V1\{
     CollegeController,
     DepartmentController,
+    LecturerController,
     StudentController,
     UserProfileController
 };
@@ -76,5 +77,9 @@ Route::group(['prefix' => 'v1'], function () {
 
         //students
         Route::apiResource('students', StudentController::class)->parameters(['students' => 'user']);
+
+        //lecturers
+        Route::get('titles', [LecturerController::class, 'academicTitle']);
+        Route::apiResource('lecturers', LecturerController::class);
     });
 });
