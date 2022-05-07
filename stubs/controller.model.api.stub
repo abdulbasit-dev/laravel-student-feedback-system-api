@@ -19,7 +19,7 @@ class {{ class }} extends Controller
     {
         //check permission
         //$this->authorize("_access");
-        //return $this->josnResponse(true, "All {{ model }}s.", Response::HTTP_OK);
+        return $this->josnResponse(true, "All {{ model }}s.", Response::HTTP_OK);
     }
 
     /**
@@ -46,7 +46,7 @@ class {{ class }} extends Controller
         //    ""=>$request->
         //]);
 
-        //return $this->josnResponse(true, "{{ model }} cretaed successfully.", Response::HTTP_CREATED);
+        return $this->josnResponse(true, "{{ model }} cretaed successfully.", Response::HTTP_CREATED);
     }
 
     /**
@@ -59,7 +59,7 @@ class {{ class }} extends Controller
     {
         //check permission
         //$this->authorize("_access");
-        //return $this->josnResponse(true, "Show {{ model }} info.", Response::HTTP_OK, ${{ modelVariable }});
+        return $this->josnResponse(true, "Show {{ model }} info.", Response::HTTP_OK, ${{ modelVariable }});
     }
 
     /**
@@ -87,7 +87,7 @@ class {{ class }} extends Controller
         //    ""=>$request->''
         //]);
 
-        //return $this->josnResponse(true, "{{ model }} updated successfully.", Response::HTTP_OK);
+        return $this->josnResponse(true, "{{ model }} updated successfully.", Response::HTTP_OK);
     }
 
     /**
@@ -102,6 +102,6 @@ class {{ class }} extends Controller
         //$this->authorize("_access");
 
         ${{ modelVariable }}->delete();
-        //return $this->josnResponse(true, "{{ model }} deleted successfully.", Response::HTTP_OK);
+        return $this->josnResponse(true, "{{ model }} deleted successfully.", Response::HTTP_OK);
     }
 }

@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class SubjectController extends Controller
 {
@@ -19,7 +20,9 @@ class SubjectController extends Controller
     {
         //check permission
         //$this->authorize("_access");
-        return $this->josnResponse(true, "All Subjects.", Response::HTTP_OK);
+
+        $subjects = Subject::query()->orderByDesc('created_at')->paginate(static::ITEM_PER_PAGE);
+        return $this->josnResponse(true, "All Subjects.", Response::HTTP_OK, $subjects);
     }
 
     /**
@@ -34,19 +37,25 @@ class SubjectController extends Controller
         //$this->authorize("_access");
 
         //validation
-        $validator = Validator::make($request->all(),[
-            ""=>['required'],
+        $validator = Validator::make($request->all(), [
+            "dept_id" => ['required', 'exists:departments,id'],
+            "name" => ['required'],
+            "code" => ['required'],
+            "stage" => ['required', Rule::in([1, 2, 3, 4, 5, 6])],
         ]);
 
         if ($validator->fails()) {
             return $this->josnResponse(false, "The given data was invalid.", Response::HTTP_UNPROCESSABLE_ENTITY, null, $validator->errors()->all());
         }
 
-        //Subject::create([
-        //    ""=>$request->
-        //]);
+        Subject::create($request->only([
+            "dept_id",
+            'name',
+            'code',
+            'stage'
+        ]));
 
-        //return $this->josnResponse(true, "Subject cretaed successfully.", Response::HTTP_CREATED);
+        return $this->josnResponse(true, "Subject cretaed successfully.", Response::HTTP_CREATED);
     }
 
     /**
@@ -59,7 +68,9 @@ class SubjectController extends Controller
     {
         //check permission
         //$this->authorize("_access");
-        //return $this->josnResponse(true, "Show Subject info.", Response::HTTP_OK, $subject);
+
+        $subject->load('college:id,name', 'dept:id,name');
+        return $this->josnResponse(true, "Show Subject info.", Response::HTTP_OK, $subject);
     }
 
     /**
@@ -75,19 +86,25 @@ class SubjectController extends Controller
         //$this->authorize("_access");
 
         //validation
-        $validator = Validator::make($request->all(),[
-            ""=>[]
+        $validator = Validator::make($request->all(), [
+            "dept_id" => ['sometimes', 'required', 'exists:departments,id'],
+            "name" => ['sometimes', 'required'],
+            "code" => ['sometimes', 'required'],
+            "stage" => ['sometimes', 'required', Rule::in([1, 2, 3, 4, 5, 6])],
         ]);
 
         if ($validator->fails()) {
             return $this->josnResponse(false, "The given data was invalid.", Response::HTTP_UNPROCESSABLE_ENTITY, null, $validator->errors()->all());
         }
 
-        //$subject->update([
-        //    ""=>$request->''
-        //]);
+        $subject->update($request->only([
+            "dept_id",
+            'name',
+            'code',
+            'stage'
+        ]));
 
-        //return $this->josnResponse(true, "Subject updated successfully.", Response::HTTP_OK);
+        return $this->josnResponse(true, "Subject updated successfully.", Response::HTTP_OK);
     }
 
     /**
@@ -102,6 +119,6 @@ class SubjectController extends Controller
         //$this->authorize("_access");
 
         $subject->delete();
-        //return $this->josnResponse(true, "Subject deleted successfully.", Response::HTTP_OK);
+        return $this->josnResponse(true, "Subject deleted successfully.", Response::HTTP_OK);
     }
 }

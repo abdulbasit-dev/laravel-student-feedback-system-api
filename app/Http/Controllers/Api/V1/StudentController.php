@@ -21,7 +21,7 @@ class StudentController extends Controller
         //check permission
         //$this->authorize("_access");
 
-        $students = User::where('is_student', 1)->paginate(10);
+        $students = User::where('is_student', 1)->paginate(static::ITEM_PER_PAGE);
 
         return $this->josnResponse(true, "All students.", Response::HTTP_OK, $students);
     }
@@ -81,6 +81,8 @@ class StudentController extends Controller
     {
         //check permission
         //$this->authorize("_access");
+
+        $user->load('college:id,name', 'dept:id,name');
 
         return $this->josnResponse(true, "Show User info.", Response::HTTP_OK, $user);
     }
