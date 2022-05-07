@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -55,6 +56,18 @@ class Handler extends ExceptionHandler
                     'result' => false,
                     'status' => Response::HTTP_FORBIDDEN,
                     'message' => "This action is unauthorized.",
+                ], 403);
+            }
+        });
+
+        //user has no permisission exception
+        $this->renderable(function (QueryException $e, $request) {
+            if ($request->wantsJson()) {
+                return response()->json([
+                    'result' => false,
+                    'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
+                    'message' => "Internal server error",
+                    'error' => $e->getMessage()
                 ], 403);
             }
         });
