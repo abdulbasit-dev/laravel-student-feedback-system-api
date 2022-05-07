@@ -13,6 +13,9 @@ use App\Http\Controllers\Api\V1\{
     CollegeController,
     DepartmentController,
     LecturerController,
+    PermissionController,
+    RoleController,
+    UserController,
     StudentController,
     SubjectController,
     UserProfileController
@@ -86,13 +89,18 @@ Route::group(['prefix' => 'v1'], function () {
         //subjects
         Route::apiResource('subjects', SubjectController::class);
 
-        //Roles
+
+        //users management
+        Route::put('/users/update-info', [UserController::class, 'updateInfo']);
+        Route::apiResource("users", UserController::class);
+
+        //roles
         Route::get('/roles/user-roles', [RoleController::class, 'userRoles']);
         Route::post('/roles/assign-user', [RoleController::class, 'assignRole']);
         Route::post('/roles/remove-user-role', [RoleController::class, 'removeRole']);
         Route::apiResource("roles", RoleController::class);
 
-        //Permissions
+        //permissions
         Route::post('/permissions/assign-permissions-role', [PermissionController::class, 'assignPermissionsToRole']);
         Route::post('/permissions/remove-permissions-role', [PermissionController::class, 'removePermissionsFromRole']);
         Route::apiResource("permissions", PermissionController::class)->except('show');

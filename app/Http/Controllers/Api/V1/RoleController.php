@@ -20,7 +20,7 @@ class RoleController extends Controller
      */
     public function index()
     {
-        $this->authorize('role_access');
+        // $this->authorize('role_access');
         $roles = Role::query()->with('permissions')->get()->toArray();
         $roles = collect($roles)->map(function ($role) {
             if ($role["name"] == "Super Admin") {
