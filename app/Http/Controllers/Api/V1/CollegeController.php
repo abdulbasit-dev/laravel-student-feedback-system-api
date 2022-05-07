@@ -19,7 +19,7 @@ class CollegeController extends Controller
     public function index()
     {
         //check permission
-        //$this->authorize("_access");
+        $this->authorize("college_view");
 
         $colleges = College::query()->with('departments:id,college_id,name')->select('id', 'name')->get();
         return $this->josnResponse(true, "All collegs.", Response::HTTP_OK, $colleges);
@@ -34,7 +34,7 @@ class CollegeController extends Controller
     public function list()
     {
         //check permission
-        //$this->authorize("_access");
+        $this->authorize("college_view");
 
         $colleges = College::query()->pluck('name', 'id')->toArray();
         return $this->josnResponse(true, "List of collegs.", Response::HTTP_OK, $colleges);
@@ -50,7 +50,7 @@ class CollegeController extends Controller
     public function show(College $college)
     {
         //check permission
-        //$this->authorize("_access");
+        $this->authorize("college_view");
 
         $college->load('departments:id,college_id,name');
         
@@ -66,7 +66,7 @@ class CollegeController extends Controller
     public function store(Request $request)
     {
         //check permission
-        //$this->authorize("_access");
+        $this->authorize("college_add");
 
         $validator = Validator::make($request->all(), [
             "name" => ['required', 'unique:colleges,name']
@@ -93,7 +93,7 @@ class CollegeController extends Controller
     public function update(Request $request, College $college)
     {
         //check permission
-        //$this->authorize("_access");
+        $this->authorize("college_edit");
 
         $validator = Validator::make($request->all(), [
             "name" => ['required', 'unique:colleges,name,' . $college->id]
@@ -119,7 +119,7 @@ class CollegeController extends Controller
     public function destroy(College $college)
     {
         //check permission
-        //$this->authorize("_access");
+        $this->authorize("college_delete");
 
         $college->delete();
         return $this->josnResponse(true, "College deleted successfully.", Response::HTTP_OK);

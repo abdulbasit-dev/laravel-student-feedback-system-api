@@ -19,7 +19,7 @@ class SubjectController extends Controller
     public function index()
     {
         //check permission
-        //$this->authorize("_access");
+        $this->authorize("subject_view");
 
         $subjects = Subject::query()->orderByDesc('created_at')->paginate(static::ITEM_PER_PAGE);
         return $this->josnResponse(true, "All Subjects.", Response::HTTP_OK, $subjects);
@@ -34,7 +34,7 @@ class SubjectController extends Controller
     public function store(Request $request)
     {
         //check permission
-        //$this->authorize("_access");
+        $this->authorize("subject_add");
 
         //validation
         $validator = Validator::make($request->all(), [
@@ -67,7 +67,7 @@ class SubjectController extends Controller
     public function show(Subject $subject)
     {
         //check permission
-        //$this->authorize("_access");
+        $this->authorize("subject_view");
 
         $subject->load('college:id,name', 'dept:id,name');
         return $this->josnResponse(true, "Show Subject info.", Response::HTTP_OK, $subject);
@@ -83,7 +83,7 @@ class SubjectController extends Controller
     public function update(Request $request, Subject $subject)
     {
         //check permission
-        //$this->authorize("_access");
+        $this->authorize("subject_edit");
 
         //validation
         $validator = Validator::make($request->all(), [
@@ -116,7 +116,7 @@ class SubjectController extends Controller
     public function destroy(Subject $subject)
     {
         //check permission
-        //$this->authorize("_access");
+        $this->authorize("subject_delete");
 
         $subject->delete();
         return $this->josnResponse(true, "Subject deleted successfully.", Response::HTTP_OK);

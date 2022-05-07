@@ -19,7 +19,7 @@ class LecturerController extends Controller
     public function index()
     {
         //check permission
-        //$this->authorize("_access");
+        $this->authorize("lecture_view");
 
         $lecturers = Lecturer::query()->paginate(static::ITEM_PER_PAGE);
         return $this->josnResponse(true, "All Lecturers.", Response::HTTP_OK, $lecturers);
@@ -33,9 +33,6 @@ class LecturerController extends Controller
      */
     public function academicTitle()
     {
-        //check permission
-        //$this->authorize("_access");
-
         $academicTitles = AcademicTitle::pluck('title','id');
         return $this->josnResponse(true, "All academic titles.", Response::HTTP_OK, $academicTitles);
     }
@@ -49,7 +46,7 @@ class LecturerController extends Controller
     public function store(Request $request)
     {
         //check permission
-        //$this->authorize("_access");
+        $this->authorize("lecture_add");
 
         //validation
         $validator = Validator::make($request->all(),[
@@ -78,7 +75,7 @@ class LecturerController extends Controller
     public function show(Lecturer $lecturer)
     {
         //check permission
-        //$this->authorize("_access");
+        $this->authorize("lecture_view");
 
         $lecturer->load('college:id,name','dept:id,name');
         return $this->josnResponse(true, "Show Lecturer info.", Response::HTTP_OK, $lecturer);
@@ -94,7 +91,7 @@ class LecturerController extends Controller
     public function update(Request $request, Lecturer $lecturer)
     {
         //check permission
-        //$this->authorize("_access");
+        $this->authorize("lecture_edit");
 
         //validation
         $validator = Validator::make($request->all(),[
@@ -121,7 +118,7 @@ class LecturerController extends Controller
     public function destroy(Lecturer $lecturer)
     {
         //check permission
-        //$this->authorize("_access");
+        $this->authorize("lecture_delete");
 
         $lecturer->delete();
         return $this->josnResponse(true, "Lecturer deleted successfully.", Response::HTTP_OK);

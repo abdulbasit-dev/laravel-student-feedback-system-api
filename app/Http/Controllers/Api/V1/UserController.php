@@ -18,7 +18,7 @@ class UserController extends Controller
     public function index()
     {
         //check permission
-        //$this->authorize("_access");
+        $this->authorize("user_view");
 
         $users = User::query()
             ->with('roles:id,name', 'college:id,name', 'department:id,name')
@@ -38,7 +38,7 @@ class UserController extends Controller
     public function store(Request $request)
     {
         //check permission
-        //$this->authorize("_access");
+        $this->authorize("user_add");
 
         //validation
         $validator = Validator::make(
@@ -83,7 +83,7 @@ class UserController extends Controller
     public function show(User $user)
     {
         //check permission
-        //$this->authorize("_access");
+        $this->authorize("user_view");
 
         $user->load('college:id,name', 'dept:id,name', 'roles:id,name');
 
@@ -100,7 +100,7 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         //check permission
-        //$this->authorize("_access");
+        $this->authorize("user_edit");
 
         //validation
         $validator = Validator::make(
@@ -146,7 +146,7 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         //check permission
-        //$this->authorize("_access");
+        $this->authorize("user_delete");
 
         $user->delete();
         return $this->josnResponse(true, "User deleted successfully.", Response::HTTP_OK);

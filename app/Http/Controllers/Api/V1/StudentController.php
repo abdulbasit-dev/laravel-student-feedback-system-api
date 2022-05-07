@@ -19,7 +19,7 @@ class StudentController extends Controller
     public function index()
     {
         //check permission
-        //$this->authorize("_access");
+        $this->authorize("student_view");
 
         $students = User::where('is_student', 1)->paginate(static::ITEM_PER_PAGE);
 
@@ -35,7 +35,7 @@ class StudentController extends Controller
     public function store(Request $request)
     {
         //check permission
-        //$this->authorize("_access");
+        $this->authorize("student_add");
 
         //validation
         $validator = Validator::make(
@@ -80,7 +80,7 @@ class StudentController extends Controller
     public function show(User $user)
     {
         //check permission
-        //$this->authorize("_access");
+        $this->authorize("student_view");
 
         $user->load('college:id,name', 'dept:id,name');
 
@@ -97,7 +97,7 @@ class StudentController extends Controller
     public function update(Request $request, User $user)
     {
         //check permission
-        //$this->authorize("_access");
+        $this->authorize("student_edit");
 
         //validation
         $validator = Validator::make(
@@ -142,7 +142,7 @@ class StudentController extends Controller
     public function destroy(User $user)
     {
         //check permission
-        //$this->authorize("_access");
+        $this->authorize("student_delete");
 
         $user->delete();
         return $this->josnResponse(true, "Student deleted successfully.", Response::HTTP_OK);

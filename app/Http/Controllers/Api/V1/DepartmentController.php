@@ -18,7 +18,7 @@ class DepartmentController extends Controller
     public function index()
     {
         //check permission
-        //$this->authorize("_access");
+        $this->authorize("department_view");
 
         $departments = Department::query()->with('college:id,name')->select('id', 'name','college_id')->get();
         return $this->josnResponse(true, "All departments.", Response::HTTP_OK, $departments);
@@ -33,7 +33,7 @@ class DepartmentController extends Controller
     public function list()
     {
         //check permission
-        //$this->authorize("_access");
+        $this->authorize("department_view");
         $departments = Department::query()->pluck('name', 'id')->toArray();
         return $this->josnResponse(true, "List Of departments.", Response::HTTP_OK, $departments);
     }
@@ -47,7 +47,7 @@ class DepartmentController extends Controller
     public function store(Request $request)
     {
         //check permission
-        //$this->authorize("_access");
+        $this->authorize("department_add");
 
         $validator = Validator::make($request->all(), [
             "name" => ['required', 'unique:departments,name'],
@@ -76,7 +76,7 @@ class DepartmentController extends Controller
     public function update(Request $request, Department $department)
     {
         //check permission
-        //$this->authorize("_access");
+        $this->authorize("department_edit");
 
         $validator = Validator::make($request->all(), [
             "name" => ['required', 'unique:departments,name,' . $department->id],
@@ -104,7 +104,7 @@ class DepartmentController extends Controller
     public function destroy(Department $department)
     {
         //check permission
-        //$this->authorize("_access");
+        $this->authorize("department_delete");
 
         $department->delete();
         return $this->josnResponse(true, "Department deleted successfully.", Response::HTTP_OK);

@@ -91,11 +91,9 @@ Route::group(['prefix' => 'v1'], function () {
 
 
         //users management
-        Route::put('/users/update-info', [UserController::class, 'updateInfo']);
         Route::apiResource("users", UserController::class);
 
         //roles
-        Route::get('/roles/user-roles', [RoleController::class, 'userRoles']);
         Route::post('/roles/assign-user', [RoleController::class, 'assignRole']);
         Route::post('/roles/remove-user-role', [RoleController::class, 'removeRole']);
         Route::apiResource("roles", RoleController::class);
