@@ -82,52 +82,14 @@ class RoleController extends Controller
         return $this->josnResponse(true, "Role delete successfully.", Response::HTTP_OK);
     }
 
-    public function userRoles(Request $request)
+    public function userRole(User $user)
     {
-        //check permission
-        $this->authorize('role_access');
-
-        //get request values
-        $name = $request->has('name') ? $request->name : null;
-        $email = $request->has('email') ? $request->email : null;
-        $phone = $request->has('phone') ? $request->phone : null;
-
-        //create user query
-        $usersQuery = User::query();
-
-        //at least one value must be passed 
-        if (!$name && !$email && !$phone) {
-            return $this->josnResponse(false, "Pleas pass name or email or phone", Response::HTTP_BAD_REQUEST);
-        }
-
-        if ($name) {
-            $usersQuery->where('name', 'like', "%$request->name%");
-        }
-
-        if ($email) {
-            $usersQuery->where('email', 'like', "%$request->email%");
-        }
-
-        if ($phone) {
-            $usersQuery->where('phone_number', 'like', "%$request->phone%");
-        }
-
-        $user = $usersQuery->first();
-        $userRole['id'] = $user->id;
-        $userRole['name'] = $user->name;
-        $userRole['email'] = $user->email;
-        $userRole['phone_number'] = $user->phone_number;
-        $userRole['image'] = $user->image;
-
-        //roles
-        [$userRole['role']] = $user->getRoleNames();
-
+        [$userRole['role']] = $user->hasRole(Role::all()) ? $user->getRoleNames() : null;
         return $this->josnResponse(true, "User Roles", Response::HTTP_OK, $userRole);
     }
 
     public function assignRole(Request $request)
     {
-        $this->authorize('role_assign');
         $validator = Validator::make($request->all(), [
             'user_id' => ['required', 'exists:users,id'],
             'role' => ['required', 'string']
@@ -174,5 +136,53 @@ class RoleController extends Controller
         } catch (\Exception $e) {
             return $this->josnResponse(false, "The given data was invalid.", Response::HTTP_UNPROCESSABLE_ENTITY, null, $e->getMessage());
         }
+    }
+
+    public function permissions()
+    {
+        $permissions = Permission::query()->select('id','name')->paginate(static::ITEM_PER_PAGE);
+        return $this->josnResponse(true, "All permissions", Response::HTTP_OK, $permissions);
+    }
+
+    public function assignPermissionsToRole(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'role_id' => ['required', 'exists:roles,id'],
+            'permssions' => ['required', 'array']
+        ]);
+
+        if ($validator->fails()) {
+            return $this->josnResponse(false, "The given data was invalid.", Response::HTTP_UNPROCESSABLE_ENTITY, null, $validator->errors()->all());
+        }
+
+        try {
+            //find role
+            $role = Role::findOrFail($request->role_id);
+
+            $role->givePermissionTo($request->permssions);
+
+            return $this->josnResponse(true, "Permissions successfully assigned to role", Response::HTTP_OK);
+        } catch (\Exception $e) {
+            return $this->josnResponse(false, "The given data was invalid.", Response::HTTP_UNPROCESSABLE_ENTITY,null,$e->getMessage());
+        }        
+    }
+
+    public function removePermissionsFromRole(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'role_id' => ['required', 'exists:roles,id'],
+            'permssions' => ['required', 'array']
+        ]);
+
+        if ($validator->fails()) {
+            return $this->josnResponse(false, "The given data was invalid.", Response::HTTP_UNPROCESSABLE_ENTITY, null, $validator->errors()->all());
+        }
+
+        //find role
+        $role = Role::findOrFail($request->role_id);
+
+        $role->revokePermissionTo($request->permssions);
+
+        return $this->josnResponse(true, "Permissions revoked from role", Response::HTTP_OK);
     }
 }

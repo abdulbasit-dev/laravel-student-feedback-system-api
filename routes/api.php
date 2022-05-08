@@ -36,7 +36,7 @@ use App\Http\Controllers\Api\V1\{
 
 //API V1 
 Route::group(['prefix' => 'v1'], function () {
-    
+
     /*##################
        PUBLIC ROUTES
     ##################*/
@@ -94,13 +94,24 @@ Route::group(['prefix' => 'v1'], function () {
         Route::apiResource("users", UserController::class);
 
         //roles
+        Route::get('roles/user-role/{user}', [RoleController::class, 'userRole']);
         Route::post('/roles/assign-user', [RoleController::class, 'assignRole']);
         Route::post('/roles/remove-user-role', [RoleController::class, 'removeRole']);
         Route::apiResource("roles", RoleController::class);
 
         //permissions
-        Route::post('/permissions/assign-permissions-role', [PermissionController::class, 'assignPermissionsToRole']);
-        Route::post('/permissions/remove-permissions-role', [PermissionController::class, 'removePermissionsFromRole']);
-        Route::apiResource("permissions", PermissionController::class)->except('show');
+        Route::post('/permissions/assign-permissions-role', [RoleController::class, 'assignPermissionsToRole']);
+        Route::post('/permissions/remove-permissions-role', [RoleController::class, 'removePermissionsFromRole']);
+        Route::get("permissions", [RoleController::class, 'permissions']);
+    });
+
+
+    //handle invalid routes
+    Route::fallback(function () {
+        return [
+            'result' => false,
+            'status' => 404,
+            'message' => "invalid route",
+        ];
     });
 });
