@@ -20,10 +20,9 @@ class RoleController extends Controller
      */
     public function index()
     {
-        // $this->authorize('role_access');
         $roles = Role::query()->with('permissions')->get()->toArray();
         $roles = collect($roles)->map(function ($role) {
-            if ($role["name"] == "Super Admin") {
+            if ($role["name"] == "admin") {
                 $role["permissions"] = Permission::all();
                 return $role;
             }
@@ -40,8 +39,8 @@ class RoleController extends Controller
      */
     public function store(RoleRequest $request)
     {
-        $this->authorize('role_create');
-        $role = Role::create($request->validated());
+        $role = Role::create(["name" => $request->name]);
+        $role->givePermissionTo($request->permssions);
         return $this->josnResponse(true, "Role created successfully", Response::HTTP_CREATED, $role);
     }
 
@@ -54,7 +53,6 @@ class RoleController extends Controller
      */
     public function show(Role $role)
     {
-        $this->authorize('role_access');
         return $this->josnResponse(true, "Role with its permissions ", Response::HTTP_OK, $role->load('permissions'));
     }
 

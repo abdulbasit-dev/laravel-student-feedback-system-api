@@ -15,6 +15,8 @@ class User extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory, Notifiable, HasApiTokens, HasRoles, BelongsToDept, BelongsToCollege;
 
+    protected $guard_name = 'sanctum';
+
     /**
      * The attributes that are mass assignable.
      *

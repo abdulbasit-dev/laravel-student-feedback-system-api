@@ -74,5 +74,8 @@ class RolePermissionSeeder extends Seeder
                 'name' => $role,
             ]);
         }
+
+        //give all permission to admin
+        // Role::whereName('admin')->first()->givePermissionTo('*');
     }
 }
