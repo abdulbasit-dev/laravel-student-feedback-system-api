@@ -100,9 +100,9 @@ Route::group(['prefix' => 'v1'], function () {
         Route::apiResource("roles", RoleController::class);
 
         //permissions
-        Route::post('/permissions/assign-permissions-role', [RoleController::class, 'assignPermissionsToRole']);
-        Route::post('/permissions/remove-permissions-role', [RoleController::class, 'removePermissionsFromRole']);
-        Route::get("permissions", [RoleController::class, 'permissions']);
+        Route::post('/permissions/assign-permissions-role', [PermissionController::class, 'assignPermissionsToRole']);
+        Route::post('/permissions/remove-permissions-role', [PermissionController::class, 'removePermissionsFromRole']);
+        Route::get("permissions", [PermissionController::class, 'index']);
     });
 
 
