@@ -55,7 +55,6 @@ Route::group(['prefix' => 'v1'], function () {
         return "ok";
     });
 
-
     /*##################
       PROTECTED ROUTES
     ##################*/
@@ -89,7 +88,6 @@ Route::group(['prefix' => 'v1'], function () {
         //subjects
         Route::apiResource('subjects', SubjectController::class);
 
-
         //users management
         Route::apiResource("users", UserController::class);
 
@@ -104,7 +102,6 @@ Route::group(['prefix' => 'v1'], function () {
         Route::post('/permissions/remove-permissions-role', [PermissionController::class, 'removePermissionsFromRole']);
         Route::get("permissions", [PermissionController::class, 'index']);
     });
-
 
     //handle invalid routes
     Route::fallback(function () {
