@@ -53,7 +53,7 @@ class RoleController extends Controller
      */
     public function show(Role $role)
     {
-        return $this->josnResponse(true, "Role with its permissions ", Response::HTTP_OK, $role->load('permissions'));
+        return $this->josnResponse(true, "Role with its permissions.", Response::HTTP_OK, $role->load('permissions'));
     }
 
     /**
@@ -65,7 +65,8 @@ class RoleController extends Controller
      */
     public function update(RoleRequest $request, Role $role)
     {
-        $role->update($request->validated());
+        $role->update(["name" => $request->name]);
+        $role->givePermissionTo($request->permssions);
         return $this->josnResponse(true, "Role updated successfully", Response::HTTP_OK);
     }
 
@@ -78,7 +79,7 @@ class RoleController extends Controller
     public function destroy(Role $role)
     {
         $role->delete();
-        return $this->josnResponse(true, "Role deleted", Response::HTTP_OK);
+        return $this->josnResponse(true, "Role delete successfully.", Response::HTTP_OK);
     }
 
     public function userRoles(Request $request)

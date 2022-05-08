@@ -62,7 +62,7 @@ class Handler extends ExceptionHandler
 
         //user has no permisission exception
         $this->renderable(function (QueryException $e, $request) {
-            if ($request->wantsJson()) {
+            if ($request->wantsJson() || $request->is('api/*')) {
                 return response()->json([
                     'result' => false,
                     'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
