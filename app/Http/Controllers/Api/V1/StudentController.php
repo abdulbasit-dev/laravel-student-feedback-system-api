@@ -104,7 +104,7 @@ class StudentController extends Controller
             $request->all(),
             [
                 "name" => ['required', 'string', 'min:3', 'max:60'],
-                "email" => ['required', 'email', 'unique:users,email,'.$user->id, 'regex:/[\w]+@+((?i)(student.){0,1}su.edu.krd(?-i))$/im'],
+                "email" => ['required', 'email', 'unique:users,email,' . $user->id, 'regex:/[\w]+@+((?i)(student.){0,1}su.edu.krd(?-i))$/im'],
                 "password" => ['required'],
                 "entry_year" => ['required'],
                 "stage" => ['required', 'integer', Rule::in([1, 2, 3, 4, 5, 6])],

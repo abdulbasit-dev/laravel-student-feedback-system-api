@@ -33,15 +33,15 @@ class UserProfileController extends Controller
             $user->email = $request->email;
         }
 
-        if ($request->has('bio') && $request->bio != null) {
+        if ($request->has('bio') && $request->bio !== null) {
             $user->bio = $request->bio;
         }
 
-        if ($request->has('gender') && $request->gender != null) {
+        if ($request->has('gender') && $request->gender !== null) {
             $user->gender = $request->gender;
         }
 
-        if ($request->has('birthday') && $request->birthday != null) {
+        if ($request->has('birthday') && $request->birthday !== null) {
             $user->birthday = $request->birthday;
         }
 

@@ -63,7 +63,7 @@ Route::group(['prefix' => 'v1'], function () {
         //Auth
         Route::post('/logout', [AuthController::class, 'logout']);
         //reset password
-        Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('errorbag');;
+        Route::post('/reset-password', [AuthController::class, 'resetPassword']);
 
         //User Profile
         Route::get('/user-profiles', [UserProfileController::class, 'index']);
