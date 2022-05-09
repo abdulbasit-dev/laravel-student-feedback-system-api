@@ -12,4 +12,10 @@ class Subject extends Model
     use HasFactory, BelongsToDept, BelongsToCollege;
 
     protected $guarded = [];
+
+
+    public function lectures()
+    {
+        return $this->belongsToMany(Lecturer::class);
+    }
 }

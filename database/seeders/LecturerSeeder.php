@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Lecturer;
+use App\Models\Subject;
 use Illuminate\Database\Seeder;
 
 class LecturerSeeder extends Seeder
@@ -2514,12 +2515,15 @@ class LecturerSeeder extends Seeder
 
         ];
         foreach ($lecturers as  $lecturer) {
-            Lecturer::create([
+            $lecturer = Lecturer::create([
                 "college_id" => $lecturer[0] > 15  ? rand(1,15) : $lecturer[0],
                 "dept_id" => $lecturer[0] > 82  ? rand(1, 82) : $lecturer[0],
                 "name" => $lecturer[2],
                 "title_id" => $lecturer[3] === 0 ? null : $lecturer[3],
             ]);
+
+            $subjects = Subject::inRandomOrder()->take(rand(2, 4))->pluck('id')->toArray();
+            $lecturer->subjects()->attach($subjects);
         }
     }
 }

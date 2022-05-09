@@ -21,7 +21,7 @@ class LecturerController extends Controller
         //check permission
         $this->authorize("lecture_view");
 
-        $lecturers = Lecturer::query()->paginate(static::ITEM_PER_PAGE);
+        $lecturers = Lecturer::query()->with("subjects:name,code,stage")->paginate(static::ITEM_PER_PAGE);
         return $this->josnResponse(true, "All Lecturers.", Response::HTTP_OK, $lecturers);
     }
 

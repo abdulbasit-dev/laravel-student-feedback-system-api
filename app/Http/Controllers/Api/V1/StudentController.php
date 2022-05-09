@@ -82,7 +82,7 @@ class StudentController extends Controller
         //check permission
         $this->authorize("student_view");
 
-        $user->load('college:id,name', 'dept:id,name');
+        $user->load('college:id,name', 'dept:id,name', 'dept.subjects:id,name,dept_id');
 
         return $this->josnResponse(true, "Show User info.", Response::HTTP_OK, $user);
     }
