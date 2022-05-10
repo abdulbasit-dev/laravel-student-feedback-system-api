@@ -66,9 +66,9 @@ Route::group(['prefix' => 'v1'], function () {
         Route::post('/reset-password', [AuthController::class, 'resetPassword']);
 
         //User Profile
-        Route::get('/user-profiles', [UserProfileController::class, 'index']);
-        Route::get('/user-profiles/{user}', [UserProfileController::class, 'userProfileById'])->name('user.profile');
-        Route::put('/user-profiles', [UserProfileController::class, 'update']);
+        // Route::get('/user-profiles', [UserProfileController::class, 'index']);
+        // Route::get('/user-profiles/{user}', [UserProfileController::class, 'userProfileById'])->name('user.profile');
+        // Route::put('/user-profiles', [UserProfileController::class, 'update']);
 
         //colleges
         Route::get('colleges/list', [CollegeController::class, 'list']);
@@ -79,6 +79,7 @@ Route::group(['prefix' => 'v1'], function () {
         Route::apiResource('departments', DepartmentController::class);
 
         //students
+        Route::get('students/subjects/{user}', [StudentController::class, 'studentSubjects']);
         Route::apiResource('students', StudentController::class)->parameters(['students' => 'user']);
 
         //lecturers

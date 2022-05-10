@@ -16,12 +16,21 @@ class StudentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         //check permission
         $this->authorize("student_view");
 
-        $students = User::where('is_student', 1)->paginate(static::ITEM_PER_PAGE);
+        //get query params from request
+        $dept_id = $request->dept_id ?? null;
+        $limit = $request->limit ?? null;
+
+        $students = User::query()
+            ->where('is_student', 1)
+            ->when($dept_id, function ($query, $dept_id) {
+                $query->whereDeptId($dept_id);
+            })
+            ->paginate($limit ?? static::ITEM_PER_PAGE);
 
         return $this->josnResponse(true, "All students.", Response::HTTP_OK, $students);
     }
@@ -146,5 +155,12 @@ class StudentController extends Controller
 
         $user->delete();
         return $this->josnResponse(true, "Student deleted successfully.", Response::HTTP_OK);
+    }
+
+    public function studentSubjects(User $user)
+    {
+        // get dept, lecturer, subject 
+        $user->load('dept:id,name', 'dept.subjects:id,dept_id,name', 'dept.subjects.lecturers:id,name');
+        return $this->josnResponse(true, "Student subjects.", Response::HTTP_OK, $user);
     }
 }
