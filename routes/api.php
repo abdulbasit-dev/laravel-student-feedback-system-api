@@ -5,13 +5,12 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Api\V1\Auth\{
     AuthController,
-    EmailVerificationController,
-    ForgetPasswordController
 };
 
 use App\Http\Controllers\Api\V1\{
     CollegeController,
     DepartmentController,
+    FeedbackController,
     LecturerController,
     PermissionController,
     RoleController,
@@ -20,7 +19,6 @@ use App\Http\Controllers\Api\V1\{
     SubjectController,
     UserProfileController
 };
-
 
 /*
 |--------------------------------------------------------------------------
@@ -102,6 +100,10 @@ Route::group(['prefix' => 'v1'], function () {
         Route::post('/permissions/assign-permissions-role', [PermissionController::class, 'assignPermissionsToRole']);
         Route::post('/permissions/remove-permissions-role', [PermissionController::class, 'removePermissionsFromRole']);
         Route::get("permissions", [PermissionController::class, 'index']);
+
+        //feedback questions
+        Route::get("feedback-questions", [FeedbackController::class,'feedbackQuestions']);
+        Route::post("feedback-submit", [FeedbackController::class, 'submitFeedback']);
     });
 
     //handle invalid routes

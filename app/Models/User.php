@@ -45,8 +45,9 @@ class User extends Authenticatable implements MustVerifyEmail
         'gender' => "int"
     ];
 
-    public function department()
+    // each student may have many feedback acording to its stage,
+    public function feedbacks()
     {
-        return $this->belongsTo(Department::class, 'dept_id', 'id');
+        return $this->hasMany(Feedaback::class, 'id');
     }
 }
