@@ -104,6 +104,7 @@ Route::group(['prefix' => 'v1'], function () {
         //feedback questions
         Route::get("feedback-questions", [FeedbackController::class,'feedbackQuestions']);
         Route::post("feedback-submit", [FeedbackController::class, 'submitFeedback']);
+        Route::get("feedback-report", [FeedbackController::class, 'report']);
     });
 
     //handle invalid routes

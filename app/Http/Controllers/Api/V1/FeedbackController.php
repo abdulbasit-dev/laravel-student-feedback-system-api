@@ -42,6 +42,7 @@ class FeedbackController extends Controller
         //check if user submited feedback this year
         //get feedback year
 
+
         Feedaback::create([
             "std_id" => $request->student_id,
             "lec_id" => $request->lecturer_id,
@@ -54,5 +55,12 @@ class FeedbackController extends Controller
         ]);
 
         return $this->josnResponse(true, "Feedback submited successfully", Response::HTTP_CREATED);
+    }
+
+    public function report(Request $request)
+    {
+        //get avg of all student score for that lecturer
+
+        return $this->josnResponse(true, "Feedback Report", Response::HTTP_OK);
     }
 }
