@@ -160,7 +160,13 @@ class StudentController extends Controller
     public function studentSubjects(User $user)
     {
         // get dept, lecturer, subject 
-        $user->load('dept:id,name', 'dept.subjects:id,dept_id,name', 'dept.subjects.lecturers:id,name');
+        $user->load([
+            'dept:id,name',
+            'dept.subjects' => function ($query) use ($user) {
+                $query->where('stage', $user->stage ?? 1)->select('id','dept_id','name','stage');
+            },
+            'dept.subjects.lecturers:id,name'
+        ]);
         return $this->josnResponse(true, "Student subjects.", Response::HTTP_OK, $user);
     }
 }
