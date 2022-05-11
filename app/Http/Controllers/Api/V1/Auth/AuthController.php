@@ -41,7 +41,7 @@ class AuthController extends Controller
         //create token
         $token = $user->createToken('myapitoken')->plainTextToken;
         $user["user_token"] = $token;
-        // $user["user_role"] = $user->getRoleNames();
+        $user["user_role"] = $user->getRoleNames()[0];
 
         return $this->josnResponse(true, "Login successfully.", Response::HTTP_OK, $user);
     }

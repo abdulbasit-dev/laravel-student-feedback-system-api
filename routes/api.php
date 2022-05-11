@@ -103,7 +103,9 @@ Route::group(['prefix' => 'v1'], function () {
 
         //feedback questions
         Route::get("feedback-questions", [FeedbackController::class,'feedbackQuestions']);
+        Route::get("feedbacks", [FeedbackController::class,'feedbacks']);
         Route::post("feedback-submit", [FeedbackController::class, 'submitFeedback']);
+        Route::delete("feedback-delete", [FeedbackController::class, 'deleteFeedback']);
         Route::get("feedback-report", [FeedbackController::class, 'report']);
     });
 

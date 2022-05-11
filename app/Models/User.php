@@ -48,6 +48,6 @@ class User extends Authenticatable implements MustVerifyEmail
     // each student may have many feedback acording to its stage,
     public function feedbacks()
     {
-        return $this->hasMany(Feedaback::class, 'id');
+        return $this->hasMany(Feedback::class, 'std_id','id');
     }
 }
