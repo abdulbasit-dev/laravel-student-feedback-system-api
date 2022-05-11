@@ -28,17 +28,24 @@ class FeedbackController extends Controller
         //check permission
         //$this->authorize("_access");
 
-        $softwareDeptId = Department::where('name', 'like', '%software%')->first()->id;
-        $softwareLecturers = Lecturer::with([
-            'subjects' => function ($qeury) {
-                $qeury->select( 'name')->first();
-            }
-        ])->where('dept_id', $softwareDeptId)->take(10)->get();
-
-        return $softwareLecturers;
-
         $feedbacks = Feedback::query()->get();
         return $this->josnResponse(true, "All Submited Feedback.", Response::HTTP_OK, $feedbacks);
+    }
+
+
+    public function studentFeedback()
+    {
+
+        // get user 
+        $user = auth()->user();
+
+        //check if user has role student
+        if (!$user->hasRole('student')) {
+            return $this->josnResponse(false, "You can not delete feedback (you are not student).", Response::HTTP_FORBIDDEN);
+        }
+
+        $feedbacks = Feedback::query()->where('std_id', $user->id)->get();
+        return $this->josnResponse(true, "All Student Submited Feedback.", Response::HTTP_OK, $feedbacks);
     }
 
     public function submitFeedback(Request $request)
