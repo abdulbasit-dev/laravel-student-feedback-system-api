@@ -1,0 +1,2034 @@
+{
+	"info": {
+		"_postman_id": "5504cb17-4e5f-4170-a826-2046b83606b4",
+		"name": "Student Feedback System",
+		"description": "##### status codes\n200 => Ok <br>\n201 => data created <br>\n204 => data deleted <br>\n422 => validation error <br>\n409 => conflict (data already exist) <br>\n500 => Internal server error (come with a resone) <br>",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "login - Admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let jsonData = JSON.parse(responseBody)\r",
+									"let token = jsonData[\"data\"]['user_token']\r",
+									"pm.collectionVariables.set(\"user_token\", token)\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"admin@su.edu.krd\",\r\n    \"password\":\"password\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/login",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login - Student",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let jsonData = JSON.parse(responseBody)\r",
+									"let token = jsonData[\"data\"]['user_token']\r",
+									"pm.collectionVariables.set(\"user_token\", token)\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"sara@student.su.edu.krd\",\r\n    \"password\":\"password\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/login",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "reset password",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "lang",
+								"value": "en",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"old_password\":\"password\",\r\n    \"new_password\":\"password1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/reset-password",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"reset-password"
+							]
+						},
+						"description": "### protected\n#### reset password"
+					},
+					"response": []
+				},
+				{
+					"name": "logout",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseurl}}/logout",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"logout"
+							]
+						},
+						"description": "## protected\n## you need pass bearer token"
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "noauth"
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "User Profile",
+			"item": [
+				{
+					"name": "get user profile",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Dummy Category",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/C:/Users/abdulbasit-dev/Downloads/food order/Ice cream/1.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{dev}}/api/user-profiles",
+							"host": [
+								"{{dev}}"
+							],
+							"path": [
+								"api",
+								"user-profiles"
+							]
+						},
+						"description": "#### get user infomation based on the passed user token (for signed user)"
+					},
+					"response": []
+				},
+				{
+					"name": "get user profile by id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{local}}/api/user-profiles/1",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"user-profiles",
+								"1"
+							]
+						},
+						"description": "#### get user information based on the passed id"
+					},
+					"response": []
+				},
+				{
+					"name": "update profile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "bio",
+									"value": "test bi4",
+									"type": "text"
+								},
+								{
+									"key": "gender",
+									"value": "3",
+									"type": "text"
+								},
+								{
+									"key": "birthday",
+									"value": "2020/03/20",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/C:/Users/abdulbasit-dev/Desktop/profile image/3.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{local}}/api/user-profiles?_method=PUT",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"user-profiles"
+							],
+							"query": [
+								{
+									"key": "_method",
+									"value": "PUT"
+								}
+							]
+						},
+						"description": "#### update user information, all the data are optional whether you passed or not or pass null,\n\n#### while updating the fName and lName you should send the whole name\ne.g. old name Abdulbasit Salah -> you went to update fName to zana, you should pass ->zana Salah as full name"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "College",
+			"item": [
+				{
+					"name": "College List",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseurl}}/colleges/list",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"colleges",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All College With Departments",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseurl}}/colleges",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"colleges"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Single College With Departments",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseurl}}/colleges/1",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"colleges",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add New College",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"test\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/colleges",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"colleges"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update College",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"test2\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/colleges/16",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"colleges",
+								"16"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete College",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"test2\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/colleges/1",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"colleges",
+								"1"
+							]
+						},
+						"description": "# note that while deleting college all the departments that belong to this college will be delete to"
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{user_token}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Department",
+			"item": [
+				{
+					"name": "Department List",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseurl}}/departments/list",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"departments",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All Departments With college & Subject",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseurl}}/departments",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"departments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add New Department",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"college_id\":2,\r\n    \"name\": \"test\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/departments",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"departments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Department",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"college_id\":3,\r\n    \"name\": \"test3\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/departments/83",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"departments",
+								"83"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Department",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"test2\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/departments/83",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"departments",
+								"83"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{user_token}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Student",
+			"item": [
+				{
+					"name": "All Student",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseurl}}/students?limit=10",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"students"
+							],
+							"query": [
+								{
+									"key": "dept_id",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Student Subject",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseurl}}/students/subjects/2",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"students",
+								"subjects",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add New Student",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"name\",\r\n    \"email\":\"basit2@su.edu.krd\",\r\n    \"password\":\"password\",\r\n    \"entry_year\":\"2019\",\r\n    \"stage\":6,\r\n    \"dept_id\": 10\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/students",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"students"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Single Student",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseurl}}/students/3",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"students",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Student",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"basit12\",\r\n    \"email\":\"basit@su.edu.krd\",\r\n    \"password\":\"password\",\r\n    \"entry_year\":\"2020\",\r\n    \"stage\":4,\r\n    \"dept_id\": 10\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/students/3",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"students",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Student",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseurl}}/students/2",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"students",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{user_token}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Lecture",
+			"item": [
+				{
+					"name": "List Of Academic Title",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseurl}}/titles",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"titles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All Lecturer",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseurl}}/lecturers",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"lecturers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add New Lecturer",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"name\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/lecturers",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"lecturers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Single Lecturer",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseurl}}/lecturers/1",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"lecturers",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Lecturer",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"basit\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/lecturers/1",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"lecturers",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Lecturer",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseurl}}/lecturers/1",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"lecturers",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{user_token}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Subject",
+			"item": [
+				{
+					"name": "All Subject",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseurl}}/subjects",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"subjects"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add New Subject",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"dept_id\": 1,\r\n    \"name\": \"test\",\r\n    \"code\": \"123\",\r\n    \"stage\": 4\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/subjects",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"subjects"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Single  Subject",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseurl}}/subjects/2073",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"subjects",
+								"2073"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update  Subject",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"dept_id\": 12,\r\n    \"name\": \"tes4\",\r\n    \"code\": \"124\",\r\n    \"stage\": 5\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/subjects/1",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"subjects",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete  Subject",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseurl}}/subjects/2073",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"subjects",
+								"2073"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{user_token}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "User Management",
+			"item": [
+				{
+					"name": "All Users",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseurl}}/users",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add New User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"basit\",\r\n    \"user_name\": \"basit\",\r\n    \"email\": \"basit@su.edu.krd\",\r\n    \"dept_id\": \"1\",\r\n    \"password\": \"password\",\r\n    \"role_id\":3\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/users",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Single User",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseurl}}/users/1",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"users",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"basit99\",\r\n    \"user_name\": \"basit\",\r\n    \"email\": \"basit@su.edu.krd\",\r\n    \"dept_id\": \"1\",\r\n    \"password\": \"password\",\r\n    \"role_id\":5\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/users/52",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"users",
+								"52"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseurl}}/users/52",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"users",
+								"52"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Role & Permissions Managment",
+			"item": [
+				{
+					"name": "All Roles",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseurl}}/roles",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"roles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Role with its Permissions",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseurl}}/roles/2",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"roles",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Role",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"admin2\",\r\n    \"permssions\": [\r\n        \"user_add\",\r\n        \"user_edit\",\r\n        \"user_delete\"\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/roles",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"roles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Role",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"basit_admin\",\r\n    \"permssions\": [\r\n        \"user_import\"\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/roles/5",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"roles",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Role",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseurl}}/roles/5",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"roles",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User Roles",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/roles/user-role/1",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"roles",
+								"user-role",
+								"1"
+							]
+						},
+						"description": "# pass user id"
+					},
+					"response": []
+				},
+				{
+					"name": "Assign/Update Role To User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user_id\":1,\r\n    \"role\": \"admin\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/roles/assign-user",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"roles",
+								"assign-user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Revoke Role From User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user_id\":1,\r\n    \"role\":\"admin\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/roles/remove-user-role",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"roles",
+								"remove-user-role"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All Permissions",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseurl}}/permissions",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"permissions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Assign Permissions To Role",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"role_id\":2,\r\n    \"permssions\":[\r\n            \"student_add\"\r\n            ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/permissions/assign-permissions-role",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"permissions",
+								"assign-permissions-role"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Revoke Permissions From Role",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"role_id\":2,\r\n    \"permssions\":[\"student_add\"]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/permissions/remove-permissions-role",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"permissions",
+								"remove-permissions-role"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Feedback",
+			"item": [
+				{
+					"name": "Feedback Questions",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": "\n",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseurl}}/feedback-questions",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"feedback-questions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All Submited Feedback (Report)",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": "\n",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/feedbacks",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"feedbacks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All Student Feedback",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": "\n",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/feedback-student",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"feedback-student"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Submit Feedback",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": "\n",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"lecturer_id\":2,\r\n    \"subject_id\":2,\r\n    \"score_avg\":50\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/feedback-submit",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"feedback-submit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Feedback",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": "\n",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/feedback-delete",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"feedback-delete"
+							]
+						},
+						"description": "# this will delete student current year feedback not all feedback\n\n## in case if student went to resubmit the feedback again"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "clear all cache (read doc)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseurl}}/clearallcache",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"clearallcache"
+					]
+				},
+				"description": "#### this route is just for back-end developer"
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{user_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseurl",
+			"value": "https://laravel-student-feedback-sys.herokuapp.com/api/v1"
+		},
+		{
+			"key": "user_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"value": "",
+			"type": "string"
+		}
+	]
+}
