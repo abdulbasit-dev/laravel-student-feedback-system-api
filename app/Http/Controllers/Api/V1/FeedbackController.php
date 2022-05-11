@@ -23,12 +23,29 @@ class FeedbackController extends Controller
         return $this->josnResponse(true, "All Feedback questions.", Response::HTTP_OK, $feedbackQuestions);
     }
 
-    public function feedbacks()
+    public function feedbacks(Request $request)
     {
         //check permission
         //$this->authorize("_access");
 
-        $feedbacks = Feedback::query()->get();
+        //get query params from request
+        $year = $request->year ?? null;
+        $college_id = $request->college_id ?? null;
+        $dept_id = $request->dept_id ?? null;
+        $limit = $request->limit ?? null;
+
+        $feedbacks = Feedback::query()
+            ->when($dept_id, function ($query, $dept_id) {
+                $query->whereDeptId($dept_id);
+            })
+            ->when($dept_id, function ($query, $dept_id) {
+                $query->whereDeptId($dept_id);
+            })
+            ->when($dept_id, function ($query, $dept_id) {
+                $query->whereDeptId($dept_id);
+            })
+            ->paginate($limit ?? static::ITEM_PER_PAGE);
+
         return $this->josnResponse(true, "All Submited Feedback.", Response::HTTP_OK, $feedbacks);
     }
 
@@ -41,7 +58,7 @@ class FeedbackController extends Controller
 
         //check if user has role student
         if (!$user->hasRole('student')) {
-            return $this->josnResponse(false, "You can not delete feedback (you are not student).", Response::HTTP_FORBIDDEN);
+            return $this->josnResponse(false, "You can see feedbacks (you are not student).", Response::HTTP_FORBIDDEN);
         }
 
         $feedbacks = Feedback::query()->where('std_id', $user->id)->get();

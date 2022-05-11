@@ -1851,12 +1851,26 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseurl}}/feedbacks",
+							"raw": "{{baseurl}}/feedbacks?limit=20&dept_id=10&year=\"2021 - 2022\"",
 							"host": [
 								"{{baseurl}}"
 							],
 							"path": [
 								"feedbacks"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "20"
+								},
+								{
+									"key": "dept_id",
+									"value": "10"
+								},
+								{
+									"key": "year",
+									"value": "\"2021 - 2022\""
+								}
 							]
 						}
 					},
