@@ -53,6 +53,14 @@ Route::group(['prefix' => 'v1'], function () {
         return "ok";
     });
 
+    //Clear all cache
+    Route::get('/reset-database', function () {   
+        Artisan::call('migrate:fresh');
+        Artisan::call('db:seed');
+        return "ok";
+
+    });
+
     /*##################
       PROTECTED ROUTES
     ##################*/
