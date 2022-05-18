@@ -75,7 +75,7 @@ class StudentController extends Controller
             "stage" => $request->stage,
             "dept_id" => $request->dept_id,
             "is_student" => 1
-        ]);
+        ])->assignRole('student');
 
         return $this->josnResponse(true, "Student cretaed successfully.", Response::HTTP_CREATED);
     }

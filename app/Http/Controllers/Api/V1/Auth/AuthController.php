@@ -16,8 +16,9 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class AuthController extends Controller
 {
-    public function login(Request $request): Json
+    public function login(Request $request)
     {
+
         //validation
         $validator = Validator::make($request->all(), [
             'email' => ['required', 'email'],
@@ -25,7 +26,7 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->error(422,$validator->errors()->all());
+            return response()->error(422, $validator->errors()->all());
         }
 
         $credentials = $request->all();
@@ -35,13 +36,13 @@ class AuthController extends Controller
 
         //check password
         if (!$user || !Hash::check($credentials['password'], $user->password)) {
-            return response()->error(401,__('api.wrong_credential'));
+            return response()->error(401, __('api.wrong_credential'));
         }
 
         //create token
         $token = $user->createToken('myapitoken')->plainTextToken;
         $user["user_token"] = $token;
-        $user["user_role"] = $user->getRoleNames()[0];
+        $user["user_role"] = $user->getRoleNames()[0] ?? null;
 
         return $this->josnResponse(true, "Login successfully.", Response::HTTP_OK, $user);
     }
@@ -67,21 +68,19 @@ class AuthController extends Controller
         ], $messages);
 
         if ($validator->fails()) {
-            return response()->error(422,$validator->errors()->all());
+            return response()->error(422, $validator->errors()->all());
         }
 
         //get user
         $user = auth()->user();
         //check password
-        if (!Hash::check($request->old_password, $user->password)){
-            return response()->error(403,__('api.invalid_password'));
+        if (!Hash::check($request->old_password, $user->password)) {
+            return response()->error(403, __('api.invalid_password'));
         }
 
         $user->password = bcrypt($request->new_password);
         $user->save();
 
-        return response()->success(200,__('api.password_reset_success'));
+        return response()->success(200, __('api.password_reset_success'));
     }
 }
-
-
