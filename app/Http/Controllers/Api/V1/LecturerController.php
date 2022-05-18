@@ -52,7 +52,7 @@ class LecturerController extends Controller
         $validator = Validator::make($request->all(), [
             "dept_id" => ['sometimes', 'required'],
             "title_id" => ['sometimes', 'required'],
-            "subjects" => ['array'],
+            "subjects" => ['required'],
             "name" => ['required', 'string'],
         ]);
 
@@ -117,7 +117,7 @@ class LecturerController extends Controller
         }
         if ($request->subjects) {
             $lecturer->subjects()->detach();
-            $lecturer->subjects()->attach($request->subjects);
+            $lecturer->subjects()->attach($request->subjects[0]);
         }
 
         $lecturer->save();
