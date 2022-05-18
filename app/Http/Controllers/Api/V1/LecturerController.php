@@ -33,7 +33,7 @@ class LecturerController extends Controller
      */
     public function academicTitle()
     {
-        $academicTitles = AcademicTitle::pluck('title','id');
+        $academicTitles = AcademicTitle::pluck('title', 'id');
         return $this->josnResponse(true, "All academic titles.", Response::HTTP_OK, $academicTitles);
     }
 
@@ -49,19 +49,24 @@ class LecturerController extends Controller
         $this->authorize("lecture_add");
 
         //validation
-        $validator = Validator::make($request->all(),[
-            "dept_id"=>['sometimes','required'],
-            "title_id"=>['sometimes','required'],
-            "name"=>['required', 'string'],
+        $validator = Validator::make($request->all(), [
+            "dept_id" => ['sometimes', 'required'],
+            "title_id" => ['sometimes', 'required'],
+            "subjects" => ['array'],
+            "name" => ['required', 'string'],
         ]);
 
         if ($validator->fails()) {
             return $this->josnResponse(false, "The given data was invalid.", Response::HTTP_UNPROCESSABLE_ENTITY, null, $validator->errors()->all());
         }
 
-        Lecturer::create([
-            "name"=>$request->name
+        $lecturer = Lecturer::create([
+            "name" => $request->name,
+            "dept_id" => $request->dept_id,
+            "title_id" => $request->title_id,
         ]);
+
+        $lecturer->subjects()->attach($request->subjects);
 
         return $this->josnResponse(true, "Lecturer cretaed successfully.", Response::HTTP_CREATED);
     }
@@ -77,7 +82,7 @@ class LecturerController extends Controller
         //check permission
         $this->authorize("lecture_view");
 
-        $lecturer->load('college:id,name','dept:id,name');
+        $lecturer->load('college:id,name', 'dept:id,name','subjects:id,name,code,stage');
         return $this->josnResponse(true, "Show Lecturer info.", Response::HTTP_OK, $lecturer);
     }
 
@@ -94,17 +99,29 @@ class LecturerController extends Controller
         $this->authorize("lecture_edit");
 
         //validation
-        $validator = Validator::make($request->all(),[
-            "name"=>['required']
+        $validator = Validator::make($request->all(), [
+            "name" => ['required']
         ]);
 
         if ($validator->fails()) {
             return $this->josnResponse(false, "The given data was invalid.", Response::HTTP_UNPROCESSABLE_ENTITY, null, $validator->errors()->all());
         }
 
-        $lecturer->update([
-            "name"=>$request->name
-        ]);
+        $lecturer->name = $request->name;
+
+        if($request->title_id){
+            $lecturer->title_id = $request->title_id;
+        }
+        if($request->dept_id){
+            $lecturer->dept_id = $request->dept_id;
+        }
+        if ($request->subjects) {
+            $lecturer->subjects()->detach();
+            $lecturer->subjects()->attach($request->subjects);
+        }
+
+        $lecturer->save();
+          
 
         return $this->josnResponse(true, "Lecturer updated successfully.", Response::HTTP_OK);
     }
