@@ -15,8 +15,8 @@ class CreateSubjectsTable extends Migration
     {
         Schema::create('subjects', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('college_id')->nullable()->constrained('colleges', 'id');
-            $table->foreignId('dept_id')->nullable()->constrained('departments', 'id');
+            $table->foreignId('college_id')->nullable()->constrained('colleges', 'id')->nullOnDelete();
+            $table->foreignId('dept_id')->nullable()->constrained('departments', 'id')->nullOnDelete();
             $table->string('name');
             $table->string('code')->nullable();
             $table->integer('stage')->nullable();

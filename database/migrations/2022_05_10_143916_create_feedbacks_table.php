@@ -15,10 +15,10 @@ class CreateFeedbacksTable extends Migration
     {
         Schema::create('feedbacks', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('std_id')->comment("student_id")->constrained('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreignId('lec_id')->comment('lecturer_id')->constrained('lecturers','id')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreignId('sub_id')->comment('subject_id')->constrained('subjects','id')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreignId('dept_id')->comment('department_id')->constrained('departments','id')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('std_id')->nullable()->comment("student_id")->constrained('users','id')->nullOnDelete()->onUpdate('cascade');
+            $table->foreignId('lec_id')->nullable()->comment('lecturer_id')->constrained('lecturers','id')->nullOnDelete()->onUpdate('cascade');
+            $table->foreignId('sub_id')->nullable()->comment('subject_id')->constrained('subjects','id')->nullOnDelete()->onUpdate('cascade');
+            $table->foreignId('dept_id')->nullable()->comment('department_id')->constrained('departments','id')->nullOnDelete()->onUpdate('cascade');
             $table->integer('score')->comment('avarage of marks that teacher get');
             $table->char('result')->nullable();
             $table->boolean('status')->nullable();

@@ -20,8 +20,8 @@ class CreateUsersTable extends Migration
             $table->year('entry_year')->nullable();
             $table->integer('stage')->nullable();
             $table->string('email')->unique();
-            $table->foreignId('college_id')->nullable()->constrained('colleges', 'id');
-            $table->foreignId('dept_id')->nullable()->constrained('departments', 'id');
+            $table->foreignId('college_id')->nullable()->constrained('colleges', 'id')->nullOnDelete();
+            $table->foreignId('dept_id')->nullable()->constrained('departments', 'id')->nullOnDelete();
             $table->boolean('is_student')->default(0);
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

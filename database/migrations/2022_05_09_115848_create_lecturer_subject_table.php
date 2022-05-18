@@ -15,8 +15,8 @@ class CreateLecturerSubjectTable extends Migration
     {
         Schema::create('lecturer_subject', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('lecturer_id')->constrained('lecturers')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreignId('subject_id')->constrained('subjects')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('lecturer_id')->nullable()->constrained('lecturers')->nullOnDelete()->onUpdate('cascade');
+            $table->foreignId('subject_id')->nullable()->constrained('subjects')->nullOnDelete()->onUpdate('cascade');
         });
     }
 

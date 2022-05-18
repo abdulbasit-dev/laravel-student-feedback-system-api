@@ -15,9 +15,9 @@ class CreateLecturersTable extends Migration
     {
         Schema::create('lecturers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('college_id')->nullable()->constrained('colleges', 'id');
-            $table->foreignId('dept_id')->nullable()->constrained('departments', 'id');
-            $table->foreignId('title_id')->nullable()->constrained('academic_titles', 'id');
+            $table->foreignId('college_id')->nullable()->constrained('colleges', 'id')->nullOnDelete();
+            $table->foreignId('dept_id')->nullable()->constrained('departments', 'id')->nullOnDelete();
+            $table->foreignId('title_id')->nullable()->constrained('academic_titles', 'id')->nullOnDelete();
             $table->string('name');
             $table->timestamps();
         });
