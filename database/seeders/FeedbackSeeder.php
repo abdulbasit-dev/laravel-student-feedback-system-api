@@ -34,12 +34,12 @@ class FeedbackSeeder extends Seeder
 
 
         // get software lecturer 
-        $softwareDeptId = Department::where('name', 'like', '%software%')->first()->id;
+        // $softwareDeptId = Department::where('name', 'like', '%software%')->first()->id;
 
         $students = User::query()
             ->inRandomOrder()
             ->where("is_student", 1)
-            ->where("dept_id", $softwareDeptId)
+            ->where("dept_id", 10)
             ->take(10)->get();
 
 
