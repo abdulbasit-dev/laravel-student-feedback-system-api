@@ -47,7 +47,7 @@ class UserController extends Controller
                 "name" => ['required'],
                 "user_name" => ['required'],
                 "email" => ['required', 'email', 'unique:users,email', 'regex:/[\w]+@+((?i)(student.){0,1}su.edu.krd(?-i))$/im'],
-                "dept_id" => ['required'],
+                "dept_id" => ['required' ,'exists:depertments,id'],
                 "password" => ['required'],
             ],
             [
