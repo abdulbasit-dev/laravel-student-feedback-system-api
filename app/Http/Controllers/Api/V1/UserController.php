@@ -21,12 +21,12 @@ class UserController extends Controller
         $this->authorize("user_view");
 
         $users = User::query()
-            ->with('roles:id,name', 'college:id,name', 'department:id,name')
+            ->with('roles:id,name', 'college:id,name', 'dept:id,name')
             ->select('id', 'name', 'user_name', 'email', 'college_id', 'dept_id')
             ->whereIsStudent(0)
             ->paginate(static::ITEM_PER_PAGE);
 
-        return $this->josnResponse(true, "All Users.", Response::HTTP_OK, $users);
+        return $this->josnResponse(true, "All Users (not include student).", Response::HTTP_OK, $users);
     }
 
     /**
