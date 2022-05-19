@@ -83,7 +83,7 @@ class FeedbackController extends Controller
                     $letter = "A";
                     break;
 
-                case $score > 4.5:
+                case in_array($score, range(4.5, 5, 0.1)):
                     $letter = "A*";
                     break;
 
